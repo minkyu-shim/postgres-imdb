@@ -7,3 +7,12 @@ services:
       - "5432:5432"
     volumes:
       - ./imdb_db:/imdb_data
+
+  loader:
+    build: .
+    env_file:
+      - .env
+    volumes:
+      - ./imdb_db:/imdb_data
+    depends_on:
+      - db
