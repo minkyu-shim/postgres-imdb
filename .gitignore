@@ -1,0 +1,12 @@
+# .gitignore
+imdb_db/
+*.tsv.gz
+*.tsv
+
+# Docker
+.env
+
+# Python
+__pycache__/
+*.pyc
+.venv/
