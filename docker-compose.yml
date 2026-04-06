@@ -6,7 +6,24 @@ services:
     ports:
       - "5432:5432"
     volumes:
+      - postgres_data:/var/lib/postgresql/data
       - ./imdb_db:/imdb_data
+      - ./init:/docker-entrypoint-initdb.d
+    # Performance tuning for bulk loading
+    command: >
+      postgres
+      -c shared_buffers=512MB
+      -c work_mem=128MB
+      -c maintenance_work_mem=512MB
+      -c synchronous_commit=off
+      -c wal_buffers=64MB
+      -c checkpoint_completion_target=0.9
+      -c max_wal_size=4GB
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   loader:
     build: .
@@ -15,4 +32,9 @@ services:
     volumes:
       - ./imdb_db:/imdb_data
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+    restart: on-failure
+
+volumes:
+  postgres_data:
