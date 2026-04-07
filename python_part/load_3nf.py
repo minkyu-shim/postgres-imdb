@@ -131,7 +131,7 @@ CREATE TABLE person_profession (
 
 CREATE TABLE title_cast (
     tconst      TEXT     REFERENCES titles(tconst),
-    ordering    SMALLINT,
+    ordering    INT,
     nconst      TEXT     REFERENCES people(nconst),
     category_id INT      REFERENCES category(category_id),
     job         TEXT,
